@@ -58,15 +58,11 @@ public class GoodsService {
 	}
 
 	// 批量商品删除
-	public Integer deleteList(String goodIdList) {
+	public Integer deleteList(Long[] goodIdList) {
 		Goods goods = new Goods();
 		Integer isDelete = 0;
-		// 将String分割成数组
-		if (goodIdList != null && goodIdList != "") {
-			goodIdList = goodIdList.replace("[", "").replace("]", "").replace(" ", "");
-			String[] mutId = goodIdList.split(",");
-			for (String a : mutId) {
-				Long deleteId = Long.parseLong(a);
+		if (goodIdList.length>0) {
+			for (Long deleteId : goodIdList) {
 				goods.setId(deleteId);
 				goods.setIsdelete((byte) 1);
 				isDelete = goodsMapper.updateByPrimaryKeySelective(goods);
@@ -108,7 +104,35 @@ public class GoodsService {
 			return 1;
 		}
 	}
-
+//添加父类型
+	public Integer addParentGoodType(ParentType parentType) {
+		if (parentType != null) {
+			Integer ischange = parentTypeMapper.insert(parentType);
+			return ischange;
+		}else {
+			return 0;
+		}
+	}
+	
+//修改子类型
+	public Integer modifyGoodType(GoodType goodType) {
+		if (goodType != null) {
+			Integer ischange = goodTypeMapper.updateByPrimaryKeySelective(goodType);
+			return ischange;
+		}else {
+			return 0;
+		}
+	}
+//修改父类型
+	public Integer modifyParentGoodType(ParentType parentType) {
+		if (parentType != null) {
+			Integer ischange = parentTypeMapper.updateByPrimaryKeySelective(parentType);
+			return ischange;
+		}else {
+			return 0;
+		}
+		
+	}
 //获取类型列表
 	public List<GoodType> getGoodTypeList() {
 		// TODO Auto-generated method stub
@@ -133,4 +157,29 @@ public class GoodsService {
 		goodType.setIsdelete((byte) 1);
 		return goodTypeMapper.updateByPrimaryKeySelective(goodType);
 	}
+	//删除父类型
+	public int deleteParentGoodType(Integer id) {
+		ParentType parentType = new ParentType();
+		parentType.setId(id);
+		parentType.setIsdelete((byte) 1);
+		return parentTypeMapper.updateByPrimaryKeySelective(parentType);
+	}
+	// 批量商品删除
+	public Integer delGoodTypeList(Integer[] goodTypeIdList) {
+		GoodType goodtype = new GoodType();
+		Integer isDelete = 0;
+		if (goodTypeIdList.length>0) {
+			for (Integer deleteId : goodTypeIdList) {
+				goodtype.setId(deleteId);
+				goodtype.setIsdelete((byte) 1);
+				isDelete = goodTypeMapper.updateByPrimaryKeySelective(goodtype);
+				if (isDelete == 0) {
+					return isDelete;
+				}
+			}
+		}
+		return isDelete;
+	}
+
+	
 }

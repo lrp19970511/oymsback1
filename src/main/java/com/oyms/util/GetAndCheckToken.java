@@ -14,7 +14,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 @Service
 public class GetAndCheckToken {
 	final static String base64EncodedSecretKey = "lrp19970511";
-	final static long TOKEN_EXP = 1000 * 60 * 60;
+	final static long TOKEN_EXP = 1000 * 60 * 180;
 
 	public static String getToken(String userName,Integer roleId) {
 

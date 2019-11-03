@@ -102,4 +102,7 @@ public interface RoleMapper {
      * @mbg.generated Tue Oct 29 20:45:56 CST 2019
      */
     int updateByPrimaryKey(Role record);
+    //获取所有权限名字
+    List<Role> getAllRoles();
+    Integer getRoleIdByName(String authname);
 }

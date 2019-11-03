@@ -77,10 +77,10 @@ public class GoodsController {
 			return apiDTO;
 		} catch (Exception e) {
 			// TODO: handle exception
+			apiDTO.setIsSuccess(false);
+			return apiDTO;
 		}
-		apiDTO.setIsSuccess(false);
-
-		return null;
+		
 	}
 
 //删除一个商品
@@ -96,9 +96,8 @@ public class GoodsController {
 
 //	批量删除
 	@PostMapping("/mutidelete")
-	public ApiDTO<?> deleteList(@RequestBody JSONObject jsonObject) {
-		String deleteGoodsList = jsonObject.getString("deleteIdList");
-		if (goodsService.deleteList(deleteGoodsList) > 0) {
+	public ApiDTO<?> deleteList(Long[] deleteIdList) {
+		if (goodsService.deleteList(deleteIdList) > 0) {
 			apiDTO.setIsSuccess(true);
 			return apiDTO;
 		}
@@ -130,7 +129,21 @@ public class GoodsController {
 		return apiDTO;
 
 	}
-
+//添加商品父类型
+@PostMapping("/addParentType")
+public ApiDTO<?> addParenGoodtType(ParentType parentType){
+	if (parentType.getPname() != null && parentType.getPname() != "") {
+		parentType.setIsdelete((byte) 0);
+		if (goodsService.addParentGoodType(parentType)>0) {
+			apiDTO3.setIsSuccess(true);
+		}else {
+			apiDTO3.setIsSuccess(false);
+		}
+		return apiDTO3;
+	}
+	apiDTO3.setIsSuccess(false);
+	return apiDTO3;
+}
 //获取商品类型列表
 	@GetMapping("/showType")
 	public ApiDTO<GoodType> showGoodType() {
@@ -142,7 +155,7 @@ public class GoodsController {
 		return apiDTO2;
 	}
 
-	// 删除商品列表
+	// 删除商品子类型列表
 	@GetMapping("/goodTypedelete")
 	public ApiDTO<?> deleteGoodType(Integer goodTypeId) {
 		if (goodsService.deleteGoodType(goodTypeId) > 0) {
@@ -152,4 +165,57 @@ public class GoodsController {
 		}
 		return apiDTO;
 	}
+	//删除商品父类型列表
+	@GetMapping("/parentGoodTypedelete")
+	public ApiDTO<?> deleteParentGoodType(Integer parentGoodTypeId){
+		if (goodsService.deleteParentGoodType(parentGoodTypeId) > 0) {
+			apiDTO.setIsSuccess(true);
+		} else {
+			apiDTO.setIsSuccess(false);
+		}
+		return apiDTO;
+	}
+	//批量删除子类型
+	@PostMapping("/mutidelgoodtype")
+	public ApiDTO<?> deleteGoodTypeList(Integer[] deleteGoodTypeIdList){
+		if (goodsService.delGoodTypeList(deleteGoodTypeIdList) > 0) {
+			apiDTO.setIsSuccess(true);
+			return apiDTO;
+		}
+		apiDTO.setIsSuccess(false);
+		return apiDTO;
+		}
+	
+	//修改子类型
+	@GetMapping("/goodTypeModify")
+	public ApiDTO<?> modifyGoodType(GoodType goodType){
+		if (goodType != null ) {
+			if (goodsService.modifyGoodType(goodType)>0) {
+				apiDTO2.setIsSuccess(true);
+			}else {
+				apiDTO2.setIsSuccess(false);
+			}
+		}else {
+			apiDTO2.setIsSuccess(false);
+		}
+		return apiDTO2;
+		
+		
+	}
+	//修改父类型
+	@GetMapping("/parentGoodTypeModify")
+	public ApiDTO<?> modifyParentGoodType(ParentType parentType){
+		if (parentType != null) {
+			if (goodsService.modifyParentGoodType(parentType)>0) {
+				apiDTO3.setIsSuccess(true);
+			}else {
+				apiDTO3.setIsSuccess(false);
+			}
+			
+		}else {
+			apiDTO3.setIsSuccess(false);
+		}
+		return apiDTO3;
+	}
+	
 }
